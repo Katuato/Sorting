@@ -1,0 +1,246 @@
+#include <iostream>
+#include <math.h>
+class Rectangle
+{
+private:
+    double m_Ax,m_Ay,m_Bx,m_By,m_Cx,m_Cy,m_Dx,m_Dy;
+
+public:
+    double firstside,secondside,thirdside,fourthside;
+    double d,p,s;
+    int existance();
+    virtual double square();
+    virtual double perimeter();
+    virtual int correctfigure();
+    virtual void setter();
+    double diagonal();
+    Rectangle()
+    {
+         m_Ax=m_Ay=m_Bx=m_By=m_Cx=m_Cy=firstside=secondside=thirdside=fourthside=0;
+
+    }
+    ~Rectangle()
+    {
+        
+    }
+};
+
+ void Rectangle::setter ()
+{
+    double Ax,Ay,Bx,By,Cx,Cy,Dx,Dy;
+    std::cout<<"Input the coordinate x of the point A\n";
+    std::cin>>Ax;
+    std::cout<<"Input the coordinate y of the point A\n";
+    std::cin>>Ay;
+    std::cout<<"Input the coordinate x of the point B\n";
+    std::cin>>Bx;
+    std::cout<<"Input the coordinate y of the point B\n";
+    std::cin>>By;
+    std::cout<<"Input the coordinate x of the point C\n";
+    std::cin>>Cx;
+    std::cout<<"Input the coordinate y of the point C\n";
+    std::cin>>Cy;
+    std::cout<<"Input the coordinate x of the point D\n";
+    std::cin>>Dx;
+    std::cout<<"Input the coordinate y of the point D\n";
+    std::cin>>Dy;
+    m_Ax = Ax;
+    m_Ay = Ay;
+    m_Bx = Bx;
+    m_By = By;
+    m_Cx = Cx;
+    m_Cy = Cy;
+    m_Dx = Dx;
+    m_Dy = Dy;
+    firstside=sqrt(pow(Bx-Ax,2)+pow(By-Ay,2));
+    secondside=sqrt(pow(Cx-Bx,2)+pow(Cy-By,2));
+    thirdside=sqrt(pow(Dx-Cx,2)+pow(Dy-Cy,2));
+    fourthside=sqrt(pow(Ax-Dx,2)+pow(Ay-Dy,2));
+    std::cout<<"The firstside="<<firstside<<"\n"<<"The secondside="<<secondside<<"\n"<<"The thirdside="<<thirdside<<"\n"<<"The fourthside="<<fourthside<<"\n";
+}
+
+double Rectangle::diagonal()
+{
+    d=sqrt(pow(firstside, 2)+pow(secondside, 2));
+    return d;
+}
+
+int Rectangle::existance()
+{
+    int k;
+    double DIAGONAL;
+    DIAGONAL=sqrt(pow(m_Cx-m_Ax,2)+pow(m_Cy-m_Ay,2));
+    if ((firstside!=thirdside) || (secondside!=fourthside)   || ((round(pow( DIAGONAL,2)*1000)/1000)!=(round(pow(firstside, 2)*1000)/1000)+(round(pow(secondside, 2)*1000)/1000))|| ((round(pow( DIAGONAL,2)*1000)/1000)!=(round(pow(thirdside, 2)*1000)/1000)+(round(pow(secondside, 2)*1000)/1000))|| ((round(pow( DIAGONAL,2)*1000)/1000)!=(round(pow(firstside, 2)*1000)/1000)+(round(pow(fourthside, 2)*1000)/1000))|| ((round(pow( DIAGONAL,2)*1000)/1000)!=(round(pow(firstside, 2)*1000)/1000)+(round(pow(fourthside, 2)*1000)/1000)))
+{
+    std::cout<<"The rectangle can't exist\n";
+    k=0;
+}
+else
+{
+    std::cout<<"The triangle exists\n";
+    k=1;
+}
+    return k;
+}
+double Rectangle::perimeter()
+{
+    p=firstside+secondside+thirdside+fourthside;
+    return p;
+}
+double Rectangle::square()
+{
+    s=firstside*secondside;
+    return s;
+}
+
+int Rectangle::correctfigure()
+{
+    int k;
+    if ((firstside==secondside) && (secondside==thirdside)&&(thirdside==fourthside)&&(fourthside==firstside))
+    {
+        k=1;
+    }
+    else
+    {
+        k=0;
+    }
+    return k;
+}
+
+
+class Prism:public Rectangle
+{
+    private:
+        double m_h;
+    public:
+        double v,sp;
+    Prism():Rectangle()
+    {
+        m_h=0;
+    }
+    ~Prism()
+    {
+        
+    }
+    
+    virtual void setter()
+    {
+        Rectangle::setter();
+        double h;
+        std::cout<<"Input the hight  of the prism \n";
+        std::cin>>h;
+        m_h = h;
+        std::cout<<"The firstside="<<firstside<<"\n"<<"The secondside="<<secondside<<"\n"<<"The hight="<<m_h<<"\n";
+    }
+
+    virtual double square()
+    {
+        Rectangle::square();
+        sp=s*2+firstside*m_h*2+secondside*m_h*2;
+        return sp;
+    }
+ 
+    double volume()
+    {
+        v=s*m_h;
+        return v;
+    }
+    virtual int correctfigure()
+    {
+        int k;
+        k=Rectangle::correctfigure();
+        if ((k==1) && (secondside==m_h))
+        {
+            k=1;
+        }
+        else
+        {
+            k=0;
+        }
+        return k;
+    }
+    
+};
+
+int main()
+{
+    int k,n,i,l,f,p;
+    double min,max;
+    f=0;
+    l=0;
+    p=0;
+    std::cout<<"Input the number of rectungles\n";
+    std::cin>>n;
+    Rectangle *rec=new Rectangle[n];
+    for (i=0;i<n;i++)
+    {
+        rec[i].setter();
+        k=rec[i].existance();
+        if (k==1)
+        {
+        std::cout<<"The diagonal="<<rec[i].diagonal()<<"\n";
+        std::cout<<"The perimetr="<<rec[i].perimeter()<<"\n";
+        std::cout<<"The square="<<rec[i].square()<<"\n";
+        k=rec[i].correctfigure();
+            if (k==1)
+            {
+                std::cout<<"It's a square\n";
+            }
+            else
+            {
+                std::cout<<"It isn't a square\n";
+            }
+        l=l+1;
+        }
+        else
+        {
+            i=i-1;
+            n=n-1;
+        }
+      
+    }
+    min=rec[0].s;
+    for (i=1;i<l;i++)
+    {
+        if (rec[i].s<min)
+        {
+            
+            min=rec[i].s;
+            f=i;
+        }
+    }
+    std::cout<<"The  rectangle №"<<f+1<<" has the smallest square and the square is "<<min<<"\n";
+    std::cout<<"Input the information about the correct rectungles\n";
+    Prism *pr=new Prism[l];
+    for (i=0;i<l;i++)
+        {
+            pr[i].setter();
+            k=pr[i].correctfigure();
+            if (k==1)
+            {
+                std::cout<<"It's a cube\n";
+            }
+            else
+            {
+                std::cout<<"It isn't a cube\n";
+            }
+            std::cout<<"The square="<<pr[i].square()<<"\n";
+            std::cout<<"The volume="<<pr[i].volume()<<"\n";
+        }
+    max=pr[0].sp;
+    for (i=1;i<l;i++)
+    {
+        if (pr[i].sp>max)
+        {
+            max=pr[i].sp;
+            p=i;
+        }
+    }
+    std::cout<<"The  rectangle №"<<p+1<<" has the largest square and the square is "<<max<<"\n";
+    delete[]rec;
+    delete[]pr;
+    return 0;
+
+}
+
+
