@@ -1,0 +1,53 @@
+#include <SFML/Audio.hpp>
+#include <SFML/Graphics.hpp>
+#include "ResourcePath.hpp"
+
+int main()
+{
+    sf::RenderWindow window(sf::VideoMode(800, 600), "The first SFML project");//creating a window with the name "The first SFML project"
+    sf::Clock clock; // adding the class Clock for measuring the time
+    sf::RectangleShape line; //creating a line in class rectangle
+    line.setPosition(85,550);
+    line.setSize(sf::Vector2f(100,3));
+    line.setFillColor(sf::Color::Magenta);
+    line.rotate(150);
+    sf::Vector2f speed = {800.f,-610.f};
+    // Start the game loop
+    while (window.isOpen())
+    {
+        // Process events
+        sf::Event event;
+        while (window.pollEvent(event))
+        {
+            // Close window: exit
+            if (event.type == sf::Event::Closed) {
+                window.close();
+            }
+
+            // Escape pressed: exit
+            if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
+                window.close();
+            }
+        }
+        const float deltaTime=clock.restart().asSeconds(); //receiving the float number of seconds
+        sf::Vector2f position=line.getPosition();
+        position+=speed*deltaTime;
+        if ((position.x>=800) && (speed.x>0))
+        {
+            line.setFillColor(sf::Color::Yellow);
+            speed.x=-speed.x;
+            speed.y=-speed.y;
+        }
+        if ((position.x<=85) && (speed.x<0))
+        {
+            line.setFillColor(sf::Color::Magenta);
+            speed.x=-speed.x;
+            speed.y=-speed.y;
+        }
+        line.move(speed.x*deltaTime,speed.y*deltaTime);
+        window.clear(sf::Color(176,224,230,0));
+        window.draw(line);
+        window.display();
+    }
+
+    return EXIT_SUCCESS;
